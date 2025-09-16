@@ -11,6 +11,7 @@
     "generate-routes": "tsr generate"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.4.0",
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/router-devtools": "^1.131.44",
     "class-variance-authority": "^0.7.1",
