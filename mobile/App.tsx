@@ -1,18 +1,15 @@
 import React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './src/screens/HomeScreen';
 import AboutScreen from './src/screens/AboutScreen';
+import Navbar from './src/components/Navbar';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -22,31 +19,47 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
+  const handleScanPress = () => {
+    Alert.alert('Scan', 'Scan functionality coming soon!');
+  };
+
+  const handleSharePress = () => {
+    Alert.alert('Share', 'Share functionality coming soon!');
+  };
+
+  const handleGamePress = () => {
+    Alert.alert('Games', 'Game functionality coming soon!');
+  };
+
+  const handleProfilePress = () => {
+    Alert.alert('Profile', 'Profile functionality coming soon!');
+  };
+
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content" backgroundColor="#1f2937" />
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#1f2937',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}>
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
-          options={{ title: 'Tag 4 Gift' }}
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+        <Navbar
+          onScanPress={handleScanPress}
+          onSharePress={handleSharePress}
+          onGamePress={handleGamePress}
+          onProfilePress={handleProfilePress}
         />
-        <Stack.Screen 
-          name="About" 
-          component={AboutScreen} 
-          options={{ title: 'About' }}
-        />
-      </Stack.Navigator>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false, // Hide the default header since we're using our custom navbar
+          }}>
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen} 
+          />
+          <Stack.Screen 
+            name="About" 
+            component={AboutScreen} 
+          />
+        </Stack.Navigator>
+      </SafeAreaView>
     </NavigationContainer>
   );
 }

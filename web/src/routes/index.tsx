@@ -2,19 +2,21 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { GameGrid } from "@/components/ui/game-grid"
 
 function Index() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="p-2">
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <div className="flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/20 py-16 px-4">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Tag 4 Gift
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-muted-foreground sm:text-2xl">
               Welcome to T4G.fun - Your Gift Tagging Solution
             </p>
           </div>
@@ -81,6 +83,9 @@ function Index() {
           </div>
         </div>
       </div>
+
+      {/* Game Grid Section */}
+      <GameGrid />
     </div>
   )
 }
