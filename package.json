@@ -1,0 +1,37 @@
+{
+  "name": "t4g-fun",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "web",
+    "mobile",
+    "shared"
+  ],
+  "scripts": {
+    "web:dev": "cd web && npm run dev",
+    "web:build": "cd web && npm run build",
+    "web:preview": "cd web && npm run preview",
+    "mobile:start": "cd mobile && npm start",
+    "mobile:android": "cd mobile && npm run android",
+    "mobile:ios": "cd mobile && npm run ios",
+    "install:all": "npm install && cd web && npm install && cd ../mobile && npm install",
+    "lint": "cd web && npm run lint",
+    "test": "echo \"No tests specified yet\""
+  },
+  "description": "Tag 4 Gift - A modern gift tagging solution",
+  "keywords": [
+    "react",
+    "react-native",
+    "vite",
+    "typescript",
+    "tailwind",
+    "shadcn",
+    "tanstack-router"
+  ],
+  "author": "Francesco",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "eslint": "^9.0.0"
+  }
+}
