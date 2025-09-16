@@ -9,18 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { QrCode, Wifi, AlertCircle, CheckCircle2 } from 'lucide-react';
-
-interface ScanModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onScanSuccess?: (decodedText: string, scanType: 'QR' | 'NFC') => void;
-}
-
-interface ScanResult {
-  text: string;
-  type: 'QR' | 'NFC';
-  timestamp: Date;
-}
+import type { ScanModalProps, ScanResult } from '../../../shared/types/scanner';
 
 export const ScanModal: React.FC<ScanModalProps> = ({
   isOpen,
@@ -94,7 +83,7 @@ export const ScanModal: React.FC<ScanModalProps> = ({
 
   const handleScanSuccess = (decodedText: string, type: 'QR' | 'NFC') => {
     const result: ScanResult = {
-      text: decodedText,
+      data: decodedText,
       type,
       timestamp: new Date(),
     };
@@ -207,7 +196,7 @@ export const ScanModal: React.FC<ScanModalProps> = ({
                   {scanResult.type} Scan Successful
                 </p>
                 <p className="text-xs text-green-600 break-all">
-                  {scanResult.text}
+                  {scanResult.data}
                 </p>
                 <p className="text-xs text-green-500 mt-1">
                   Scanned at {scanResult.timestamp.toLocaleTimeString()}
