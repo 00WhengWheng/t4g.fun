@@ -51,9 +51,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (credentials?.accessToken) {
         const userInfo = await auth0.auth.userInfo({ token: credentials.accessToken });
         setUser({
-          id: userInfo.sub,
-          name: userInfo.name,
-          email: userInfo.email,
+          id: userInfo.sub || '',
+          name: userInfo.name || '',
+          email: userInfo.email || '',
           picture: userInfo.picture,
           email_verified: userInfo.email_verified,
           nickname: userInfo.nickname,
@@ -79,9 +79,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       const userInfo = await auth0.auth.userInfo({ token: credentials.accessToken });
       setUser({
-        id: userInfo.sub,
-        name: userInfo.name,
-        email: userInfo.email,
+        id: userInfo.sub || '',
+        name: userInfo.name || '',
+        email: userInfo.email || '',
         picture: userInfo.picture,
         email_verified: userInfo.email_verified,
         nickname: userInfo.nickname,
