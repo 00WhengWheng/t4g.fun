@@ -13,7 +13,7 @@ This is a monorepo containing:
 ## Technology Stack
 
 ### Web Application
-- **React 19** with TypeScript for type safety
+- **React 18** with TypeScript for type safety
 - **Vite** for fast development and building
 - **TanStack Router** for modern, type-safe routing
 - **shadcn/ui** for beautiful, accessible components
@@ -22,6 +22,7 @@ This is a monorepo containing:
 
 ### Mobile Application
 - **React Native** for cross-platform mobile development
+- **React 18** for compatibility with web application
 - **React Navigation** for native navigation
 - **TypeScript** for type safety
 - **Native styling** with React Native StyleSheet
@@ -30,6 +31,7 @@ This is a monorepo containing:
 - **TypeScript** interfaces and types
 - **Utility functions** for common operations
 - **Shared components** (planned)
+- **Turborepo** for monorepo management and build optimization
 
 ## Getting Started
 
@@ -48,10 +50,15 @@ cd t4g.fun
 
 2. Install dependencies for all projects
 ```bash
-npm run install:all
+npm install
 ```
 
 ### Development
+
+#### All Projects
+```bash
+npm run dev
+```
 
 #### Web Application
 ```bash
@@ -76,6 +83,11 @@ npm run mobile:ios
 
 ### Building
 
+#### All Projects
+```bash
+npm run build
+```
+
 #### Web Application
 ```bash
 npm run web:build
@@ -90,7 +102,9 @@ npm run web:build
 - ✅ React Native mobile application structure
 - ✅ React Navigation for mobile routing
 - ✅ Shared TypeScript types and utilities
-- ✅ Monorepo structure with workspaces
+- ✅ Monorepo structure with **Turborepo** for optimized builds
+- ✅ **Resolved React dependency conflicts** between web and mobile
+- ✅ **Shared TypeScript types and utilities**
 - ✅ **Auth0 authentication system** 🔐
 - ✅ **Protected routes and user profiles**
 - ✅ **Cross-platform authentication (Web & Mobile)**

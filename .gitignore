@@ -154,3 +154,9 @@ dist
 
 # Metro bundler cache
 /mobile/.metro-health-check*
+
+# Turborepo
+.turbo
+
+# Shared package build output
+./shared/dist
