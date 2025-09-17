@@ -1,61 +1,47 @@
-import { useState } from 'react'
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { LoginButton, LogoutButton, UserProfile } from '@/components/auth/AuthComponents'
-import { ScanModal } from '@/components/ScanModal'
-import { Button } from '@/components/ui/button'
-import { QrCode } from 'lucide-react'
+import { Navbar } from '@/components/navbar/Navbar'
 
-export const Route = createRootRoute({
-  component: () => {
-    const [isScanModalOpen, setIsScanModalOpen] = useState(false)
-
-    const handleScanSuccess = (decodedText: string, scanType: 'QR' | 'NFC') => {
-      console.log(`${scanType} scan result:`, decodedText)
-      // You can add additional logic here to handle the scanned data
-      alert(`${scanType} Scanned: ${decodedText}`)
-      setIsScanModalOpen(false)
-    }
-
-    return (
-      <>
-        <div className="p-2 flex gap-2 items-center justify-between">
-          <div className="flex gap-2">
-            <Link to="/" className="[&.active]:font-bold">
+function RootComponent() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      {/* Secondary navigation for pages */}
+      <div className="border-b bg-muted/40">
+        <div className="container mx-auto px-4">
+          <div className="flex h-12 items-center space-x-6">
+            <Link 
+              to="/" 
+              className="text-sm font-medium transition-colors hover:text-primary [&.active]:text-primary [&.active]:font-semibold"
+            >
               Home
-            </Link>{' '}
-            <Link to="/about" className="[&.active]:font-bold">
+            </Link>
+            <Link 
+              to="/about" 
+              className="text-sm font-medium transition-colors hover:text-primary [&.active]:text-primary [&.active]:font-semibold"
+            >
               About
             </Link>
-            <Link to="/profile" className="[&.active]:font-bold">
+            <Link 
+              to="/profile" 
+              className="text-sm font-medium transition-colors hover:text-primary [&.active]:text-primary [&.active]:font-semibold"
+            >
               Profile
             </Link>
           </div>
-          <div className="flex gap-2 items-center">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsScanModalOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <QrCode className="w-4 h-4" />
-              Scan
-            </Button>
-            <UserProfile />
-            <LoginButton />
-            <LogoutButton />
-          </div>
         </div>
-        <hr />
+      </div>
+
+      <main className="container mx-auto px-4 py-6">
         <Outlet />
-        <TanStackRouterDevtools />
-        
-        <ScanModal
-          isOpen={isScanModalOpen}
-          onClose={() => setIsScanModalOpen(false)}
-          onScanSuccess={handleScanSuccess}
-        />
-      </>
-    )
-  },
+      </main>
+      
+      <TanStackRouterDevtools />
+    </div>
+  )
+}
+
+export const Route = createRootRoute({
+  component: RootComponent,
 })
