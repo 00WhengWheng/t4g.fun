@@ -2,21 +2,25 @@
   "name": "t4g-fun",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@10.8.2",
   "workspaces": [
     "web",
     "mobile",
     "shared"
   ],
   "scripts": {
-    "web:dev": "cd web && npm run dev",
-    "web:build": "cd web && npm run build",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "web:dev": "turbo dev --filter=web",
+    "web:build": "turbo build --filter=web",
     "web:preview": "cd web && npm run preview",
-    "mobile:start": "cd mobile && npm start",
-    "mobile:android": "cd mobile && npm run android",
-    "mobile:ios": "cd mobile && npm run ios",
-    "install:all": "npm install && cd web && npm install && cd ../mobile && npm install",
-    "lint": "cd web && npm run lint",
-    "test": "echo \"No tests specified yet\""
+    "mobile:start": "turbo start --filter=mobile",
+    "mobile:android": "turbo android --filter=mobile",
+    "mobile:ios": "turbo ios --filter=mobile",
+    "install:all": "npm install",
+    "clean": "turbo clean && rm -rf node_modules/.cache"
   },
   "description": "Tag 4 Gift - A modern gift tagging solution",
   "keywords": [
@@ -31,7 +35,8 @@
   "author": "Francesco",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^9.0.0",
     "prettier": "^3.0.0",
-    "eslint": "^9.0.0"
+    "turbo": "^2.5.6"
   }
 }
