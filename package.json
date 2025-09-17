@@ -9,18 +9,18 @@
     "shared"
   ],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "web:dev": "turbo dev --filter=web",
-    "web:build": "turbo build --filter=web",
-    "web:preview": "cd web && npm run preview",
-    "mobile:start": "turbo start --filter=mobile",
-    "mobile:android": "turbo android --filter=mobile",
-    "mobile:ios": "turbo ios --filter=mobile",
+    "build": "nx run-many -t build",
+    "dev": "nx run-many -t dev",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test",
+    "web:dev": "nx dev web",
+    "web:build": "nx build web",
+    "web:preview": "nx preview web",
+    "mobile:start": "nx start mobile",
+    "mobile:android": "nx android mobile",
+    "mobile:ios": "nx ios mobile",
     "install:all": "npm install",
-    "clean": "turbo clean && rm -rf node_modules/.cache"
+    "clean": "nx reset && rm -rf node_modules/.cache"
   },
   "description": "Tag 4 Gift - A modern gift tagging solution",
   "keywords": [
@@ -37,6 +37,6 @@
   "devDependencies": {
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
-    "turbo": "^2.5.6"
+    "nx": "21.5.2"
   }
 }
