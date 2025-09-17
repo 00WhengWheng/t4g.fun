@@ -74,3 +74,6 @@ export interface GameSession {
   isCompleted: boolean;
   answers?: QuizAnswer[];
 }
+
+// Export share types
+export * from './share';

@@ -2,11 +2,15 @@ import { Button } from "@/components/ui/button"
 import { QrCode, Share2, Gamepad2, User } from "lucide-react"
 import { useState } from "react"
 import { ScanModal } from "@/components/ScanModal"
+import { ShareModal } from "@/components/ShareModal"
 import { LoginButton, LogoutButton, UserProfile } from "@/components/auth/AuthComponents"
 import { useAuth0 } from "@auth0/auth0-react"
 
+type SocialPlatform = 'facebook' | 'instagram' | 'tiktok';
+
 export const Navbar = () => {
   const [isScanModalOpen, setIsScanModalOpen] = useState(false)
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const { isAuthenticated } = useAuth0()
 
   const handleScanSuccess = (decodedText: string, scanType: 'QR' | 'NFC') => {
@@ -16,8 +20,15 @@ export const Navbar = () => {
   }
 
   const handleShare = () => {
-    // Placeholder for share functionality
-    alert("Share functionality coming soon!")
+    setIsShareModalOpen(true)
+  }
+
+  const handleShareSuccess = (platform: SocialPlatform, response: unknown) => {
+    console.log(`Share success on ${platform}:`, response)
+  }
+
+  const handleShareError = (platform: SocialPlatform, error: Error) => {
+    console.error(`Share error on ${platform}:`, error)
   }
 
   const handleGame = () => {
@@ -90,6 +101,13 @@ export const Navbar = () => {
         isOpen={isScanModalOpen}
         onClose={() => setIsScanModalOpen(false)}
         onScanSuccess={handleScanSuccess}
+      />
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        onShareSuccess={handleShareSuccess}
+        onShareError={handleShareError}
       />
     </>
   )
