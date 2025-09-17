@@ -1,38 +1,47 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
 import { GameCard, ChallengeCard } from '@/components/cards/GameCards'
+import { GameModal } from '@/components/GameModal'
+import { gameService } from '@/services/gameService'
+import type { Game } from '../../../shared/types'
 
 function Index() {
+  const [games, setGames] = useState<Game[]>([])
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null)
+  const [isGameModalOpen, setIsGameModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    loadGames()
+  }, [])
+
+  const loadGames = async () => {
+    try {
+      const gamesData = await gameService.getGames()
+      setGames(gamesData)
+    } catch (error) {
+      console.error('Failed to load games:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handlePlayGame = (gameTitle: string) => {
-    alert(`Starting ${gameTitle}!`)
+    const game = games.find(g => g.title === gameTitle)
+    if (game) {
+      setSelectedGame(game)
+      setIsGameModalOpen(true)
+    }
   }
 
   const handleJoinChallenge = (challengeTitle: string) => {
     alert(`Joining ${challengeTitle}!`)
   }
 
-  const gameCardsData = [
-    {
-      title: "QR Hunt",
-      description: "Scan QR codes around the city to collect points and unlock rewards.",
-      players: 1,
-      difficulty: "Easy",
-      rating: 4.5,
-    },
-    {
-      title: "Team Trivia",
-      description: "Join teams and compete in exciting trivia challenges on various topics.",
-      players: 4,
-      difficulty: "Medium",
-      rating: 4.8,
-    },
-    {
-      title: "AR Adventure",
-      description: "Explore the world through augmented reality and complete missions.",
-      players: 1,
-      difficulty: "Hard",
-      rating: 4.2,
-    },
-  ]
+  const handleCloseGameModal = () => {
+    setIsGameModalOpen(false)
+    setSelectedGame(null)
+  }
 
   const challengeCardsData = [
     {
@@ -78,17 +87,23 @@ function Index() {
           <span className="text-sm text-muted-foreground">Play solo or with friends</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gameCardsData.map((game, index) => (
-            <GameCard
-              key={index}
-              title={game.title}
-              description={game.description}
-              players={game.players}
-              difficulty={game.difficulty}
-              rating={game.rating}
-              onPlay={() => handlePlayGame(game.title)}
-            />
-          ))}
+          {isLoading ? (
+            <div className="col-span-full text-center py-8">
+              <p className="text-muted-foreground">Loading games...</p>
+            </div>
+          ) : (
+            games.map((game) => (
+              <GameCard
+                key={game.id}
+                title={game.title}
+                description={game.description}
+                players={game.players}
+                difficulty={game.difficulty}
+                rating={game.rating}
+                onPlay={() => handlePlayGame(game.title)}
+              />
+            ))
+          )}
         </div>
       </div>
 
@@ -120,6 +135,13 @@ function Index() {
           Use the navigation bar above to scan QR codes, share with friends, or dive into games!
         </p>
       </div>
+
+      {/* Game Modal */}
+      <GameModal
+        isOpen={isGameModalOpen}
+        onClose={handleCloseGameModal}
+        game={selectedGame}
+      />
     </div>
   )
 }

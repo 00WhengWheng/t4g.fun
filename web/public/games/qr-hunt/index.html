@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Hunt Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        .game-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        
+        .score {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #4ade80;
+        }
+        
+        .scan-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .scan-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .qr-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .qr-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .qr-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .qr-item.found {
+            background: rgba(74, 222, 128, 0.3);
+            border: 2px solid #4ade80;
+        }
+        
+        .timer {
+            font-size: 1.2em;
+            color: #fbbf24;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🔍 QR Hunt</h1>
+        <p>Find and scan QR codes around the city to collect points!</p>
+        
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="timer">Time: <span id="timer">05:00</span></div>
+        
+        <button class="scan-button" onclick="simulateScan()">📱 Scan QR Code</button>
+        
+        <div class="qr-list">
+            <div class="qr-item" data-points="10">🏪 Store</div>
+            <div class="qr-item" data-points="15">🏦 Bank</div>
+            <div class="qr-item" data-points="20">🏛️ Museum</div>
+            <div class="qr-item" data-points="25">🎭 Theater</div>
+            <div class="qr-item" data-points="30">🏰 Castle</div>
+            <div class="qr-item" data-points="35">🗼 Tower</div>
+        </div>
+        
+        <div id="message" style="margin-top: 20px; font-size: 1.1em;"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 300; // 5 minutes
+        let foundItems = new Set();
+        
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const messageElement = document.getElementById('message');
+        
+        // Start timer
+        const timer = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                endGame();
+            }
+        }, 1000);
+        
+        function simulateScan() {
+            const items = document.querySelectorAll('.qr-item:not(.found)');
+            if (items.length === 0) {
+                messageElement.textContent = '🎉 All QR codes found! You win!';
+                endGame();
+                return;
+            }
+            
+            // Randomly select an unfound item
+            const randomItem = items[Math.floor(Math.random() * items.length)];
+            const points = parseInt(randomItem.dataset.points);
+            
+            score += points;
+            scoreElement.textContent = score;
+            randomItem.classList.add('found');
+            foundItems.add(randomItem.textContent);
+            
+            messageElement.textContent = `📍 Found ${randomItem.textContent}! +${points} points`;
+            
+            setTimeout(() => {
+                messageElement.textContent = '';
+            }, 2000);
+        }
+        
+        function endGame() {
+            clearInterval(timer);
+            messageElement.innerHTML = `
+                <h3>🎮 Game Over!</h3>
+                <p>Final Score: ${score}</p>
+                <p>QR Codes Found: ${foundItems.size}/6</p>
+                <button class="scan-button" onclick="window.parent.postMessage({type: 'GAME_FINISHED', score: ${score}}, '*')">
+                    Close Game
+                </button>
+            `;
+        }
+        
+        // Send score updates to parent window (for integration)
+        setInterval(() => {
+            window.parent.postMessage({
+                type: 'GAME_UPDATE',
+                score: score,
+                timeLeft: timeLeft
+            }, '*');
+        }, 1000);
+    </script>
+</body>
+</html>
