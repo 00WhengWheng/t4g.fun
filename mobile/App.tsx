@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './src/screens/HomeScreen';
 import AboutScreen from './src/screens/AboutScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import { AuthProvider } from './src/auth/AuthProvider';
-import { ScanModal } from './src/components/ScanModal';
+import Navbar from './src/components/Navbar';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -26,62 +20,48 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
-  const [isScanModalVisible, setIsScanModalVisible] = useState(false);
-
-  const handleScanSuccess = (data: string, type: 'QR' | 'NFC') => {
-    console.log(`${type} scan result:`, data);
-    setIsScanModalVisible(false);
+  const handleScanPress = () => {
+    Alert.alert('Scan', 'Scan functionality coming soon!');
   };
 
-  const ScanButton = () => (
-    <TouchableOpacity
-      onPress={() => setIsScanModalVisible(true)}
-      style={styles.scanButton}
-    >
-      <Text style={styles.scanButtonText}>📱 Scan</Text>
-    </TouchableOpacity>
-  );
+  const handleSharePress = () => {
+    Alert.alert('Share', 'Share functionality coming soon!');
+  };
+
+  const handleGamePress = () => {
+    Alert.alert('Games', 'Game functionality coming soon!');
+  };
+
+  const handleProfilePress = () => {
+    Alert.alert('Profile', 'Profile functionality coming soon!');
+  };
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <StatusBar barStyle="light-content" backgroundColor="#1f2937" />
+    <NavigationContainer>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+        <Navbar
+          onScanPress={handleScanPress}
+          onSharePress={handleSharePress}
+          onGamePress={handleGamePress}
+          onProfilePress={handleProfilePress}
+        />
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
-            headerStyle: {
-              backgroundColor: '#1f2937',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-            headerRight: () => <ScanButton />,
+            headerShown: false, // Hide the default header since we're using our custom navbar
           }}>
           <Stack.Screen 
             name="Home" 
             component={HomeScreen} 
-            options={{ title: 'Tag 4 Gift' }}
           />
           <Stack.Screen 
             name="About" 
             component={AboutScreen} 
-            options={{ title: 'About' }}
-          />
-          <Stack.Screen 
-            name="Profile" 
-            component={ProfileScreen} 
-            options={{ title: 'Profile' }}
           />
         </Stack.Navigator>
-        
-        <ScanModal
-          visible={isScanModalVisible}
-          onClose={() => setIsScanModalVisible(false)}
-          onScanSuccess={handleScanSuccess}
-        />
-      </NavigationContainer>
-    </AuthProvider>
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
 
