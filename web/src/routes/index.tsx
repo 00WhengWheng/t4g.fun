@@ -2,69 +2,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { GameGrid } from "@/components/ui/game-grid"
 
 function Index() {
-  const [games, setGames] = useState<Game[]>([])
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null)
-  const [isGameModalOpen, setIsGameModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    loadGames()
-  }, [])
-
-  const loadGames = async () => {
-    try {
-      const gamesData = await gameService.getGames()
-      setGames(gamesData)
-    } catch (error) {
-      console.error('Failed to load games:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handlePlayGame = (gameTitle: string) => {
-    const game = games.find(g => g.title === gameTitle)
-    if (game) {
-      setSelectedGame(game)
-      setIsGameModalOpen(true)
-    }
-  }
-
-  const handleJoinChallenge = (challengeTitle: string) => {
-    alert(`Joining ${challengeTitle}!`)
-  }
-
-  const handleCloseGameModal = () => {
-    setIsGameModalOpen(false)
-    setSelectedGame(null)
-  }
-
-  const challengeCardsData = [
-    {
-      title: "Daily Photo Challenge",
-      description: "Capture the best photo based on today's theme and win amazing prizes.",
-      reward: "50 Points",
-      timeLimit: "24h",
-      participants: 128,
-    },
-    {
-      title: "Weekend Marathon",
-      description: "Complete a series of tasks over the weekend to earn exclusive badges.",
-      reward: "Badge",
-      timeLimit: "48h",
-      participants: 67,
-    },
-    {
-      title: "Monthly Leaderboard",
-      description: "Compete with players worldwide to reach the top of the monthly rankings.",
-      reward: "Premium",
-      timeLimit: "30 days",
-      participants: 1542,
-    },
-  ]
+  const [count, setCount] = useState(0)
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -85,12 +25,12 @@ function Index() {
               <CardHeader>
                 <CardTitle>React + Vite</CardTitle>
                 <CardDescription>
-                  Modern web development with fast HMR
+                  Fast development with hot module replacement
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Built with React 19 and Vite for the best developer experience.
+                  Modern React development with lightning-fast Vite bundler.
                 </p>
               </CardContent>
             </Card>
@@ -136,45 +76,20 @@ function Index() {
               <Button variant="secondary">Secondary</Button>
               <Button variant="ghost">Ghost</Button>
             </div>
-          ) : (
-            games.map((game) => (
-              <GameCard
-                key={game.id}
-                title={game.title}
-                description={game.description}
-                players={game.players}
-                difficulty={game.difficulty}
-                rating={game.rating}
-                onPlay={() => handlePlayGame(game.title)}
-              />
-            ))
-          )}
+          </div>
         </div>
       </div>
 
-      {/* Challenges Section */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">Active Challenges</h2>
-          <span className="text-sm text-muted-foreground">Limited time opportunities</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {challengeCardsData.map((challenge, index) => (
-            <ChallengeCard
-              key={index}
-              title={challenge.title}
-              description={challenge.description}
-              reward={challenge.reward}
-              timeLimit={challenge.timeLimit}
-              participants={challenge.participants}
-              onJoin={() => handleJoinChallenge(challenge.title)}
-            />
-          ))}
+      {/* Features Section */}
+      <div className="container mx-auto px-4 py-16 space-y-16">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-bold tracking-tight">Built with Modern Tools</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            T4G.fun is built with the latest technologies to provide a fast, 
+            reliable, and enjoyable experience across web and mobile platforms.
+          </p>
         </div>
       </div>
-
-      {/* Game Grid Section */}
-      <GameGrid />
     </div>
   )
 }

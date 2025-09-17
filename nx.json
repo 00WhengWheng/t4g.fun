@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "test": {
+      "outputs": [
+        "{projectRoot}/coverage"
+      ],
+      "cache": true
+    },
+    "build": {
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "cache": true
+    },
+    "generate-routes": {
+      "outputs": [
+        "{projectRoot}/src"
+      ],
+      "cache": true
+    },
+    "android": {
+      "cache": true
+    },
+    "ios": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "start": {
+      "cache": true
+    },
+    "dev": {
+      "cache": true
+    },
+    "preview": {
+      "cache": true
+    }
+  }
+}

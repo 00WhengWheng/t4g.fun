@@ -31,7 +31,7 @@ This is a monorepo containing:
 - **TypeScript** interfaces and types
 - **Utility functions** for common operations
 - **Shared components** (planned)
-- **Turborepo** for monorepo management and build optimization
+- **NX** for monorepo management and build optimization
 
 ## Getting Started
 
@@ -102,7 +102,7 @@ npm run web:build
 - ✅ React Native mobile application structure
 - ✅ React Navigation for mobile routing
 - ✅ Shared TypeScript types and utilities
-- ✅ Monorepo structure with **Turborepo** for optimized builds
+- ✅ Monorepo structure with **NX** for optimized builds
 - ✅ **Resolved React dependency conflicts** between web and mobile
 - ✅ **Shared TypeScript types and utilities**
 - ✅ **Auth0 authentication system** 🔐

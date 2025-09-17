@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   SafeAreaView,
   StatusBar,
+  StyleSheet,
   Alert,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
