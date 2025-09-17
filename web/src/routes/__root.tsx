@@ -10,6 +10,10 @@ export const Route = createRootRoute({
         <Outlet />
       </main>
       <TanStackRouterDevtools />
-    </>
-  ),
+    </div>
+  )
+}
+
+export const Route = createRootRoute({
+  component: RootComponent,
 })
