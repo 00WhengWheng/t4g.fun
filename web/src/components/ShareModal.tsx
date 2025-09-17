@@ -19,13 +19,42 @@ import {
   ExternalLink,
   Loader2
 } from 'lucide-react';
-import type { 
-  ShareModalProps, 
-  SocialPlatform, 
-  ShareContent, 
-  ShareResult,
-  ShareCapabilities 
-} from '../../../shared/types/share';
+
+// Types for share functionality
+export type SocialPlatform = 'facebook' | 'instagram' | 'tiktok';
+
+export interface ShareContent {
+  title: string;
+  description: string;
+  url: string;
+  imageUrl?: string;
+  hashtags?: string[];
+}
+
+export interface ShareModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  content?: ShareContent;
+  onShareSuccess?: (platform: SocialPlatform, response: unknown) => void;
+  onShareError?: (platform: SocialPlatform, error: Error) => void;
+}
+
+export interface ShareResult {
+  platform: SocialPlatform;
+  success: boolean;
+  response?: unknown;
+  error?: string;
+  timestamp: Date;
+}
+
+export interface ShareCapabilities {
+  hasNativeShare: boolean;
+  supportedPlatforms: SocialPlatform[];
+  canShareFiles: boolean;
+  canShareText: boolean;
+  canShareUrl: boolean;
+}
+
 import { shareService } from '@/services/shareService';
 
 export const ShareModal: React.FC<ShareModalProps> = ({

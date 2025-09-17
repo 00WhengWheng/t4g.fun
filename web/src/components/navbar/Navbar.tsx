@@ -6,7 +6,7 @@ import { ShareModal } from "@/components/ShareModal"
 import { LoginButton, LogoutButton, UserProfile } from "@/components/auth/AuthComponents"
 import { useAuth0 } from "@auth0/auth0-react"
 
-import type { SocialPlatform } from '../../../shared/types/share'
+type SocialPlatform = 'facebook' | 'instagram' | 'tiktok';
 
 export const Navbar = () => {
   const [isScanModalOpen, setIsScanModalOpen] = useState(false)

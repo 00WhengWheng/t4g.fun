@@ -1,10 +1,40 @@
-import type { 
-  SocialPlatform, 
-  ShareContent, 
-  ShareResult, 
-  SocialPlatformConfig,
-  ShareCapabilities 
-} from '../../../shared/types/share';
+// Types for share functionality
+export type SocialPlatform = 'facebook' | 'instagram' | 'tiktok';
+
+export interface ShareContent {
+  title: string;
+  description: string;
+  url: string;
+  imageUrl?: string;
+  hashtags?: string[];
+}
+
+export interface ShareResult {
+  platform: SocialPlatform;
+  success: boolean;
+  response?: unknown;
+  error?: string;
+  timestamp: Date;
+}
+
+export interface SocialPlatformConfig {
+  name: string;
+  icon: string;
+  color: string;
+  enabled: boolean;
+  apiConfig?: {
+    appId?: string;
+    permissions?: string[];
+  };
+}
+
+export interface ShareCapabilities {
+  hasNativeShare: boolean;
+  supportedPlatforms: SocialPlatform[];
+  canShareFiles: boolean;
+  canShareText: boolean;
+  canShareUrl: boolean;
+}
 
 // Social platform configurations
 const socialPlatforms: Record<SocialPlatform, SocialPlatformConfig> = {
