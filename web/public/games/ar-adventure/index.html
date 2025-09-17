@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Adventure Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 50%, #ff4757 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        .game-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        
+        .progress {
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #4ade80;
+            transition: width 0.5s ease;
+        }
+        
+        .mission-list {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .mission {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mission:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(10px);
+        }
+        
+        .mission.completed {
+            background: rgba(74, 222, 128, 0.2);
+            border-left-color: #4ade80;
+        }
+        
+        .mission.active {
+            background: rgba(251, 191, 36, 0.2);
+            border-left-color: #fbbf24;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .action-button {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-button:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+        
+        .action-button:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .ar-view {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed #fbbf24;
+            border-radius: 10px;
+            padding: 40px;
+            margin: 20px 0;
+            font-size: 1.5em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🥽 AR Adventure</h1>
+        <p>Explore mysterious locations through augmented reality!</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div>🏆 Score</div>
+                <div id="score">0</div>
+            </div>
+            <div class="stat">
+                <div>📍 Locations</div>
+                <div id="locations">0/5</div>
+            </div>
+            <div class="stat">
+                <div>⚡ Energy</div>
+                <div id="energy">100</div>
+            </div>
+        </div>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+        
+        <div class="ar-view" id="arView">
+            🎯 Point your device to explore the world around you
+        </div>
+        
+        <div class="mission-list">
+            <div class="mission active" data-mission="0">
+                <strong>🏰 Discover the Ancient Castle</strong>
+                <p>Find the hidden castle in the mystical forest</p>
+            </div>
+            <div class="mission" data-mission="1">
+                <strong>💎 Collect Magic Crystals</strong>
+                <p>Gather 3 glowing crystals from the castle grounds</p>
+            </div>
+            <div class="mission" data-mission="2">
+                <strong>🗝️ Unlock the Secret Door</strong>
+                <p>Use the crystals to open the mysterious portal</p>
+            </div>
+            <div class="mission" data-mission="3">
+                <strong>🐉 Face the Guardian</strong>
+                <p>Solve the riddle of the ancient dragon</p>
+            </div>
+            <div class="mission" data-mission="4">
+                <strong>👑 Claim the Treasure</strong>
+                <p>Retrieve the legendary crown of power</p>
+            </div>
+        </div>
+        
+        <button class="action-button" onclick="exploreLocation()" id="exploreBtn">
+            🔍 Explore Current Location
+        </button>
+        
+        <div id="message" style="margin-top: 20px; font-size: 1.1em;"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let energy = 100;
+        let currentMission = 0;
+        let locationsVisited = 0;
+        
+        const scoreElement = document.getElementById('score');
+        const energyElement = document.getElementById('energy');
+        const locationsElement = document.getElementById('locations');
+        const progressBar = document.getElementById('progressBar');
+        const arView = document.getElementById('arView');
+        const messageElement = document.getElementById('message');
+        const exploreBtn = document.getElementById('exploreBtn');
+        
+        const missionTexts = [
+            "🏰 You discovered the Ancient Castle! The walls shimmer with magic.",
+            "💎 Crystal found! It pulses with mysterious energy. (2 more needed)",
+            "🗝️ The secret door creaks open, revealing a dark passage ahead.",
+            "🐉 The dragon speaks: 'What has keys but no locks?' Answer: Piano!",
+            "👑 Victory! You've claimed the Crown of Infinite Wisdom!"
+        ];
+        
+        function exploreLocation() {
+            if (energy <= 0) {
+                messageElement.textContent = '⚡ Not enough energy! Rest for a moment.';
+                return;
+            }
+            
+            // Use energy
+            energy -= 20;
+            energyElement.textContent = energy;
+            
+            // Random chance of finding something
+            if (Math.random() > 0.3) {
+                completeMission();
+            } else {
+                messageElement.textContent = '🌫️ Nothing here... keep exploring!';
+                setTimeout(() => messageElement.textContent = '', 2000);
+            }
+            
+            updateARView();
+            
+            // Disable button temporarily
+            exploreBtn.disabled = true;
+            setTimeout(() => {
+                exploreBtn.disabled = false;
+            }, 2000);
+        }
+        
+        function completeMission() {
+            if (currentMission >= 5) return;
+            
+            const missions = document.querySelectorAll('.mission');
+            missions[currentMission].classList.remove('active');
+            missions[currentMission].classList.add('completed');
+            
+            const points = (currentMission + 1) * 100;
+            score += points;
+            locationsVisited++;
+            
+            scoreElement.textContent = score;
+            locationsElement.textContent = `${locationsVisited}/5`;
+            progressBar.style.width = `${(locationsVisited / 5) * 100}%`;
+            
+            messageElement.textContent = `${missionTexts[currentMission]} +${points} points!`;
+            
+            currentMission++;
+            
+            if (currentMission < 5) {
+                missions[currentMission].classList.add('active');
+            } else {
+                endGame();
+            }
+            
+            setTimeout(() => messageElement.textContent = '', 3000);
+        }
+        
+        function updateARView() {
+            const arTexts = [
+                '🏰 Ancient stones covered in mystical runes',
+                '💎 Sparkling crystals embedded in rock walls',
+                '🗝️ Ornate doorway with intricate carvings',
+                '🐉 Massive dragon statue with glowing eyes',
+                '👑 Golden pedestal waiting for a worthy hero'
+            ];
+            
+            if (currentMission < arTexts.length) {
+                arView.textContent = arTexts[currentMission];
+            }
+        }
+        
+        function endGame() {
+            messageElement.innerHTML = `
+                <h3>🎉 Adventure Complete!</h3>
+                <p>Final Score: ${score}</p>
+                <p>You are now the legendary AR Explorer!</p>
+                <button class="action-button" onclick="window.parent.postMessage({type: 'GAME_FINISHED', score: ${score}}, '*')">
+                    Return to T4G
+                </button>
+            `;
+            exploreBtn.style.display = 'none';
+        }
+        
+        // Energy regeneration
+        setInterval(() => {
+            if (energy < 100) {
+                energy = Math.min(100, energy + 5);
+                energyElement.textContent = energy;
+            }
+        }, 3000);
+        
+        // Send updates to parent
+        setInterval(() => {
+            window.parent.postMessage({
+                type: 'GAME_UPDATE',
+                score: score,
+                progress: (locationsVisited / 5) * 100
+            }, '*');
+        }, 1000);
+        
+        // Initialize
+        updateARView();
+    </script>
+</body>
+</html>

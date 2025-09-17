@@ -28,3 +28,49 @@ export interface Gift {
   userId: string;
   createdAt: Date;
 }
+
+// Game Types
+export type GameCategory = 'quiz' | 'reaction' | 'music' | 'puzzle';
+
+export interface Game {
+  id: string;
+  title: string;
+  description: string;
+  category: GameCategory;
+  players: number;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  rating: number;
+  isActive: boolean;
+  // For GDevelop games
+  bundlePath?: string;
+  // For quiz games
+  questionCount?: number;
+}
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  category?: string;
+  points: number;
+}
+
+export interface QuizAnswer {
+  questionId: string;
+  selectedAnswer: number;
+  isCorrect: boolean;
+  timeSpent: number;
+}
+
+export interface GameSession {
+  id: string;
+  gameId: string;
+  userId?: string;
+  startTime: Date;
+  endTime?: Date;
+  score: number;
+  isCompleted: boolean;
+  answers?: QuizAnswer[];
+}
